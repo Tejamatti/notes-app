@@ -1,8 +1,9 @@
 import { useNotes } from "../../context/notesContext";
 import findNotesInArchive from "../../utils/findNotesAchive";
+import findNotesInBin from "../../utils/findNotesInBin";
 
 const NotesCard = ({ id, title, text, isPinned }) => {
-  const { notesDispatch, archive } = useNotes();
+  const { notesDispatch, archive,bin } = useNotes();
   const onPinClick = (id) => {
     !isPinned
       ? notesDispatch({
@@ -28,7 +29,27 @@ const NotesCard = ({ id, title, text, isPinned }) => {
         });
   };
 
+//changes are made here
+
+  const onDeleteClick = (id) => {
+    if (isNotesInBin) {
+      notesDispatch({
+        type: "PERMANENT_DELETE",
+        payload: { id },
+      });
+    } else {
+      notesDispatch({
+        type: "DELETE_NOTE",
+        payload: { id },
+      });
+    }
+  };
+
+
   const isNotesInArchive = findNotesInArchive(archive, id);
+  console.log(archive)
+
+  const isNotesInBin = findNotesInBin(bin,id); // Placeholder for bin logic, if needed
 
   return (
     <div
@@ -37,14 +58,19 @@ const NotesCard = ({ id, title, text, isPinned }) => {
     >
       <div className="flex justify-between border-b-2">
         <p>{title}</p>
-        {!isNotesInArchive ? <button onClick={() => onPinClick(id)}>
-          <span
-            className={isPinned ? "material-icons" : "material-icons-outlined"}
-          >
-            push_pin
-          </span>
-        </button>:<></>}
-        
+        {!isNotesInArchive ? (
+          <button onClick={() => onPinClick(id)}>
+            <span
+              className={
+                isPinned ? "material-icons" : "material-icons-outlined"
+              }
+            >
+              push_pin
+            </span>
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="flex flex-col ">
         <p>{text}</p>
@@ -58,12 +84,25 @@ const NotesCard = ({ id, title, text, isPinned }) => {
               archive
             </span>
           </button>
-          <button>
+
+          {/* <button onClick={() => onDeleteClick(id)}>
             <span className="material-icons-outlined">delete</span>
-          </button>
+          </button> */}
+
+          {isNotesInBin ? (
+            <button onClick={() => onDeleteClick(id)}>
+              <span className="material-icons">delete_forever</span>
+            </button>
+          ) : (
+            <button onClick={() => onDeleteClick(id)}>
+              <span className="material-icons-outlined">delete</span>
+            </button>
+          )}
+          
         </div>
       </div>
     </div>
   );
 };
+
 export default NotesCard;

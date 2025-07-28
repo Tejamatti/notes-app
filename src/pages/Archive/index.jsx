@@ -13,7 +13,7 @@ const Archive = () => {
         <div>
           <div className=" flex flex-wrap gap-6 w-screen mt-7">
             {archive?.length > 0 &&
-              archive.map(({ title, text, id, isPinned }) => (
+              archive.filter(Boolean).map(({ title, text, id, isPinned }) => (
                 <NotesCard
                   key={id}
                   id={id}
