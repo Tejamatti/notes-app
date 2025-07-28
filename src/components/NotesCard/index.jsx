@@ -1,9 +1,11 @@
 import { useNotes } from "../../context/notesContext";
 import findNotesInArchive from "../../utils/findNotesAchive";
 import findNotesInBin from "../../utils/findNotesInBin";
+import findNotesInImportant from "../../utils/findNotesInImportant";
 
 const NotesCard = ({ id, title, text, isPinned }) => {
-  const { notesDispatch, archive,bin } = useNotes();
+  const { notesDispatch, archive,bin, important } = useNotes();
+
   const onPinClick = (id) => {
     !isPinned
       ? notesDispatch({
@@ -46,10 +48,23 @@ const NotesCard = ({ id, title, text, isPinned }) => {
   };
 
 
+  const onToggleImportant = () => {
+    notesDispatch({
+      type: isNotesImportant ? "REMOVE_FROM_IMPORTANT" : "ADD_TO_IMPORTANT",
+      payload: { id, title, text, isPinned },
+    });
+  };
+
+
+
+
+
   const isNotesInArchive = findNotesInArchive(archive, id);
   console.log(archive)
 
   const isNotesInBin = findNotesInBin(bin,id); // Placeholder for bin logic, if needed
+
+  const isNotesImportant = findNotesInImportant(important, id); // Assuming isImportant is passed as a prop
 
   return (
     <div
@@ -85,6 +100,16 @@ const NotesCard = ({ id, title, text, isPinned }) => {
             </span>
           </button>
 
+          <button onClick={onToggleImportant}>
+            <span
+              className={
+                isNotesImportant ? "material-icons" : "material-icons-outlined"
+              }
+            >
+              star
+            </span>
+          </button>
+
           {/* <button onClick={() => onDeleteClick(id)}>
             <span className="material-icons-outlined">delete</span>
           </button> */}
@@ -98,7 +123,6 @@ const NotesCard = ({ id, title, text, isPinned }) => {
               <span className="material-icons-outlined">delete</span>
             </button>
           )}
-          
         </div>
       </div>
     </div>

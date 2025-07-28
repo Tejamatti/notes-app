@@ -4,7 +4,7 @@ import { useNotes } from "../../context/notesContext";
 import NotesCard from "../../components/NotesCard";
 
 const Home = () => {
-  const { title, text, notes,archive, notesDispatch } = useNotes();
+  const { title, text, notes,archive,isImportant, notesDispatch } = useNotes();
 
   const onTitleChange = (e) => {
     notesDispatch({
@@ -71,32 +71,34 @@ const Home = () => {
                 <h1>Pinned Notes</h1>
                 <div className=" flex flex-wrap gap-6">
                   {pinnedNotes?.length > 0 &&
-                    pinnedNotes.map(({ title, text, id, isPinned }) => (
+                    pinnedNotes.map(({ title, text, id, isPinned, isImportant }) => (
                       <NotesCard
                         key={id}
                         id={id}
                         title={title}
                         text={text}
                         isPinned={isPinned}
+                        isImportant={isImportant}
                       />
                     ))}
                 </div>
               </div>
             )}
             <div>
-            {pinnedNotes?.length > 0 && <h1>Unpinned Notes</h1>}
-            <div className=" flex flex-wrap gap-6 ">
-              {unpinnedNotes?.length > 0 &&
-                unpinnedNotes.map(({ title, text, id, isPinned }) => (
-                  <NotesCard
-                    key={id}
-                    id={id}
-                    title={title}
-                    text={text}
-                    isPinned={isPinned}
-                  />
-                ))}
-            </div>
+              {pinnedNotes?.length > 0 && <h1>Unpinned Notes</h1>}
+              <div className=" flex flex-wrap gap-6 ">
+                {unpinnedNotes?.length > 0 &&
+                  unpinnedNotes.map(({ title, text, id, isPinned, isImportant }) => (
+                    <NotesCard
+                      key={id}
+                      id={id}
+                      title={title}
+                      text={text}
+                      isPinned={isPinned}
+                      isImportant={isImportant}
+                    />
+                  ))}
+              </div>
             </div>
           </div>
         </div>

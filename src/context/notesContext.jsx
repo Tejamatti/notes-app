@@ -8,19 +8,20 @@ const NotesContext = createContext();
      text: "",
      notes: [],
      archive:[],
-     bin:[]
+     bin:[],
+     important:[],
     //  pinnedNotes: [],
     //  unpinnedNotes: [],
    };
 
-   const [{ title, text, notes, archive,bin }, notesDispatch] = useReducer(
+   const [{ title, text, notes, archive,bin,important }, notesDispatch] = useReducer(
      notesReducer,
      initialState
    );
 
 
   return (
-    <NotesContext.Provider value={{ title, text, notes, archive, bin, notesDispatch }}>
+    <NotesContext.Provider value={{ title, text, notes, archive, bin,important, notesDispatch }}>
       {children}
     </NotesContext.Provider>
   );

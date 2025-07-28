@@ -18,7 +18,13 @@ const notesReducer = (state,{type,payload}) =>{
         ...state,
         notes: [
           ...state.notes,
-          { title: state.title, text: state.text, id: uuid(), isPinned: false },
+          {
+            title: state.title,
+            text: state.text,
+            id: uuid(),
+            isPinned: false,
+            isImportant: false,
+          },
         ],
       };
     case "CLEAR_INPUT":
@@ -75,6 +81,26 @@ const notesReducer = (state,{type,payload}) =>{
       return {
         ...state,
         bin: state.bin.filter(({ id }) => id !== payload.id),
+      };
+
+    case "ADD_TO_IMPORTANT":
+      return {
+        ...state,
+        important: [
+          ...state.important,
+          state.notes.find(({ id }) => id === payload.id),
+        ],
+        notes: state.notes.filter(({ id }) => id !== payload.id),
+      };
+
+    case "REMOVE_FROM_IMPORTANT":
+      return {
+        ...state,
+        notes: [
+          ...state.notes,
+          state.important.find(({ id }) => id === payload.id),
+        ],
+        important: state.important.filter(({ id }) => id !== payload.id),
       };
 
     default:
